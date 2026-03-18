@@ -213,7 +213,7 @@ required /></td>
     <td><input type="date" id="dob" name="dob" /></td>
   </tr>
 </table>
-
+<button type="submit">Submit</button>
       <!-- </form> -->
       
     </fieldset>
@@ -222,91 +222,117 @@ required /></td>
     <!-- education form -->
     <fieldset>
       <legend>Education details</legend>
-       <table>
-        <tr>
-          <th>Course</th>
-          <th>Name of board</th>
-          <th>Passing Year</th>
-          <th>Percentage</th>
+      <!-- <form> -->
+        <table>
+          <!-- <tr>
+            <th colspan="8">SSC result</th>
           </tr>
           <tr>
-            <td>
-              <select name="education[0][ed_id]">
-              <% edDetails.forEach((e) => { %>
-                <% if(e.ed_name === 'SSC') {%>
-  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
-<% }}) %>
-              </select>
             </td>
             <td>
-              <input type="text" name="education[0][board_name]">
+              <label for="ssc_nob">Name of board</label>
+              <input type="text" id="ssc_nob" name="ssc_nob" required />
             </td>
             <td>
-                <input type="text" name="education[0][pass_year]">
+              <label for="ssc_pass">passing year</label>
+              <input type="text" id="ssc_pass" name="ssc_pass" pattern="/^(19|20)\d{2}$/" required/>
             </td>
             <td>
-                <input type="number" name="education[0][percent]">
+              <label for="ssc_pr">percentage</label>
+              <input type="text" id="ssc_pr" name="ssc_pr" min="34" max="100" required/>
             </td>
           </tr>
           <tr>
-             <td>
-              <select name="education[1][ed_id]">
-               <% edDetails.forEach((e) => { %>
-               <% if(e.ed_name==='HSC'){%>
- <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
-<% }}) %>
-              </select>
-            </td>
-           <td>
-              <input type="text" name="education[1][board_name]">
-            </td>
-            <td>
-                <input type="text" name="education[1][pass_year]">
-            </td>
-            <td>
-                <input type="number" name="education[1][percent]">
-            </td>
-          </tr> 
+            <td colspan="10"><hr /></td>
+          </tr>
           <tr>
-             <td>
-              <select name="education[2][ed_id]">
-               <% edDetails.forEach((e) => { %>
-                <% if(!(e.ed_name==='SSC' || e.ed_name==='HSC')){%>
-  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
-<% }}) %>
-              </select>
+            <th>HSC result</th>
+          </tr>
+          <tr>
+            <td>
+              <label for="hsc nob">Name of board</label>
+              <input type="text" id="hsc_nob" name="hsc_nob" required/>
             </td>
             <td>
-              <input type="text" name="education[2][board_name]">
+              <label for="hsc_pass">passing year</label>
+              <input type="text" id="hsc_pass" name="hsc_pass"  pattern="/^(19|20)\d{2}$/" required/>
             </td>
             <td>
-                <input type="text" name="education[2][pass_year]">
-            </td>
-            <td>
-                <input type="number" name="education[2][percent]">
+              <label for="hsc_pr">percentage</label>
+              <input type="text" id="hsc_pr" name="hsc_pr" min="34" max="100" required/>
             </td>
           </tr>
-           <tr>
-             <td>
-              <select name="education[3][ed_id]">
-               <% edDetails.forEach((e) => { %>
-                <% if(!(e.ed_name==='SSC' || e.ed_name==='HSC')){%>
-  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
-<% }}) %>
-              </select>
+          <tr>
+            <td colspan="4"><hr /></td>
+          </tr>
+          <tr>
+            <th>Bachelor Degree</th>
+          </tr>
+          <tr>
+            <td>
+              <label for="bachelor_cname">Course Name</label>
+              <input type="text" id="bachelor_cname" name="bachelor_cname" required/>
             </td>
             <td>
-              <input type="text" name="education[3][board_name]">
+              <label for="bachelor_uni">university</label>
+              <input type="text" id="bachelor_uni" name="bachelor_uni" required/>
             </td>
             <td>
-                <input type="text" name="education[3][pass_year]">
+              <label for="bachelor_py">passing year</label>
+              <input type="text" id="bachelor_py" name="bachelor_py" required />
             </td>
             <td>
-                <input type="number" name="education[3][percent]">
+              <label for="bachelor_pr">percentage</label>
+              <input type="text" id="bachelor_pr" name="bachelor_pr" min="34" max="100" required/>
             </td>
           </tr>
-       </table>
-    
+          <tr>
+            <td colspan="10"><hr /></td>
+          </tr>
+          <tr>
+            <th>Master Degree</th>
+          </tr>
+          <tr>
+            <td>
+              <label for="master_cname">Course Name</label>
+              <input type="text" id="master_cname" name="master_cname" required/>
+            </td>
+            <td>
+              <label for="master_uni">university</label>
+              <input type="text" id="master_uni" name="master_uni" required/>
+            </td>
+            <td>
+              <label for="master_py">passing year</label>
+              <input type="text" id="master_py" name="master_py" required />
+            </td>
+            <td>
+              <label for="master_pr">percentage</label>
+              <input type="text" id="master_pr" name="master_pr" min="34" max="100" required/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="10"><hr /></td>
+          </tr> -->
+          <tr>
+            <th>COURSE</th>
+            <th>NAME OF BOARD</th>
+            <th>PASSING YEAR</th>
+            <th>PERCENTAGE</th>
+          </tr>
+          <tr>
+            <td>
+              <!-- <select name="course">
+                <% edDetails.forEach(e)=>{ %>
+                  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
+                <% } %> -->
+              </select>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      <!-- </form> -->
     </fieldset>
 
     <!-- work Experience -->
@@ -325,17 +351,14 @@ required /></td>
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" id="cname[]" pattern="[A-Za-z ]{3,}" name="work[0][company_name]"
+              <td><input type="text" id="cname[]" pattern="[A-Za-z ]{3,}" 
             title="Company name must contain at least 3 letters and only alphabets" required /></td>
-
               <td><input type="text" id="des[]"  pattern="[A-Za-z ]{2,}" 
-            title="Designation must contain only letters" name= "work[0][designation]" required/></td>
-
+            title="Designation must contain only letters" required/></td>
               <td><input type="date" id="fromdt[]" required 
-            title="Please select From Date" name="work[0][from_date]" /></td>
-
+            title="Please select From Date" /></td>
               <td><input type="date" id="todt[]" required 
-            title="Please select To Date" name="work[0][to_date]"/></td>
+            title="Please select To Date"/></td>
               <td>
                 <button type="button" onclick="removerow()">remove</button>
               </td>
@@ -349,72 +372,45 @@ required /></td>
     <!-- Language -->
     <fieldset>
       <legend>Language Known</legend>
+      <!-- <form action="#"> -->
          <table id="langtable">
-
+      <thead>
         <tr>
           <th>Language Name</th>
           <th>read</th>
           <th>write</th>
           <th>speak</th>
         </tr>
-
-        <%languages.forEach((l,i)=>{%>
-        <tr>
-      <td>
-        <%= l.language_name %>
-        <input type="hidden" name="languages[<%= i %>][lang_id]" value="<%= l.lang_id %>">
-        </td>
-
-        <td>
-        <input type="checkbox" name="languages[<%= i %>][read]" value="1">
-        </td>
-
-        <td>
-        <input type="checkbox" name="languages[<%= i %>][write]" value="1">
-        </td>
-
-        <td>
-        <input type="checkbox" name="languages[<%= i %>][speak]" value="1">
-        </td>
-
-        </tr>
-        <% }) %>
+      </thead>
+      <tbody id="addlangbody"></tbody>
     </table>
+        <input type="text" name="add_lang" id="add_lang" required
+           pattern="[A-Za-z ]{2,}"
+           title="Language must contain only letters and minimum 2 characters">
+        <input type= "button" onclick="addLang()" value="Add Language">
+      <!-- </form> -->
     </fieldset>
 
     <!-- Technologies -->
 <fieldset>
   <legend>Technologies Known</legend>
+  <!-- <form> -->
     <table id="techtable">
+      <thead>
         <tr>
           <th>Technology Name</th>
           <th>Beginner</th>
-          <th>Intermediate</th>
+          <th>Mediator</th>
           <th>Expert</th>
         </tr>
-          <tbody>
-            <tr>
-      <td>
-        <select name="technologies[0][tech_id]" >
-          <% techDetails.forEach(t=>{ %>
-          <option value="<%= t.tech_id %>"><%= t.tech_name %></option>
-                    <% })%>
-        </select>
-        </td>
-        <td>
-        <input type="radio" name="technologies[0][proficiency_level]" value="beginner">
-        </td>
-
-        <td>
-        <input type="radio" name="technologies[0][proficiency_level]" value="intermediate">
-        </td>
-
-        <td>
-        <input type="radio" name="technologies[0][proficiency_level]" value="expert">
-        </td>
-        </tr></tbody>
+      </thead>
+      <tbody id="addtechbody"></tbody>
     </table>
-   <button type="button" id="techbtn" onclick="addTech()">Add Technology</button>
+    <input type="text" name="addtech" id="add_tech" required
+      pattern="[A-Za-z+#. ]{2,}"
+      title="Technology name must contain only letters and at least 2 characters (e.g., Java, C++, .NET)">
+    <input type="button" value="Add tech" onclick="addTech()" >
+  <!-- </form> -->
 </fieldset>
 
 <!-- Reference -->
@@ -422,7 +418,29 @@ required /></td>
   <legend>Reference Contact</legend>
   <!-- <form> -->
     <table>
-  
+      <tr>
+        <td>
+          <label for="rname">Name</label>
+          <td>
+            <input type="text" name="rname" id="rname" required
+          pattern="[A-Za-z ]{3,}"
+          title="Name must contain only letters and at least 3 characters">
+          </td>
+        <td>
+          <label for="rphn">Contact</label>
+          <td>
+          <input type="text" name="rphn" id="rphn" required
+          pattern="[0-9]{10}"
+          title="Contact must be a 10 digit number">
+        </td>
+        <td>
+          <label for="rname">Relation</label>
+          <td>
+          <input type="text" name="rrel" id="rrel" required
+          pattern="[A-Za-z ]{3,}"
+          title="Relation must contain only letters">
+        </td>
+      </tr>
        <tr>
         <td>
           <label for="rname">Name</label>
@@ -500,11 +518,12 @@ required /></td>
         </td>
       </tr>
     </table>
-      
+  <!-- </form> -->
 </fieldset>
- <button type="submit">Submit</button>
+
  </form>
-    <script>
+
+    <script src="./logic/form_task.js">
     </script>
   </body>
 </html>

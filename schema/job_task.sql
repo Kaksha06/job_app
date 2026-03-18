@@ -24,7 +24,7 @@ create table education(
 ed_id bigint primary key auto_increment,
 ed_name varchar(50)
 );
-
+	
 Create table education_details(
 education_id bigint primary key auto_increment,
 applicant_id bigint not null,
@@ -35,6 +35,8 @@ percentage decimal(5,2) not null,
 foreign key(applicant_id) references basic_details(applicant_id),
 foreign key(ed_id) references education(ed_id)
 );
+select * from basic_details;
+truncate basic_details;
 
 
 CREATE TABLE work_experience (
@@ -72,14 +74,13 @@ CREATE TABLE student_technologies (
     student_tech_id bigint PRIMARY KEY AUTO_INCREMENT,
     applicant_id bigint not null,
     tech_id bigint not null,
-    level ENUM(
-        'Beginner',
-        'Intermediate',
-        'Expert'
-    ),
+	is_beginner boolean not null,
+    is_intermediate boolean not null,
+    is_expert boolean not null,
     FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id),
     FOREIGN KEY (tech_id) REFERENCES technologies (tech_id)
 );
+
 drop table technologies;
 drop table student_technologies;
 
@@ -100,11 +101,14 @@ CREATE TABLE preferences (
     notice_period VARCHAR(50) not null,
     department VARCHAR(100) not null,
     expected_ctc DECIMAL(10, 2) not null,
+    current_ctc decimal(10,2) not null,
     FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id)
 );
 
-drop table education;
+drop table preferences;
  drop table education_details;
  SET FOREIGN_KEY_CHECKS = 0;
  show tables;
+ select * from languages;
  drop database job_application;	
+ insert into languages (language_name) values("hindi")

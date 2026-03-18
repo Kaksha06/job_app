@@ -19,37 +19,70 @@ function generateLang() {
 }
 generateLang();
 
-let technologies = ["Java", "Python", "MySql", "PHP"];
-function addTech() {
-  let tech = document.getElementById("add_tech").value;
-  technologies.push(tech);
-  generatetech();
-}
-function generatetech() {
-  let techbody = document.getElementById("addtechbody");
-  techbody.innerHTML = "";
-  for (let i = 0; i < technologies.length; i++) {
-    let newrow = document.createElement("tr");
-    newrow.innerHTML = `
-        <td class="tech_name">${technologies[i]}</td>
-        <td><input type="radio" name="${technologies[i]}" class="beginner"></td>
-        <td><input type="radio" name="${technologies[i]}" class="mediator"></td>
-        <td><input type="radio" name="${technologies[i]}" class="expert"></td>`;
-    techbody.appendChild(newrow);
-  }
-}
-generatetech();
-function removerow() {
-  console.log("hii");
+// let technologies = ["Java", "Python", "MySql", "PHP"];
+// function addTech() {
+//   let tech = document.getElementById("add_tech").value;
+//   technologies.push(tech);
+//   generatetech();
+// }
+// function generatetech() {
+//   let techbody = document.getElementById("addtechbody");
+//   techbody.innerHTML = "";
+//   for (let i = 0; i < technologies.length; i++) {
+//     let newrow = document.createElement("tr");
+//     newrow.innerHTML = `
+//         <td class="tech_name">${technologies[i]}</td>
+//         <td><input type="radio" name="${technologies[i]}" class="beginner"></td>
+//         <td><input type="radio" name="${technologies[i]}" class="mediator"></td>
+//         <td><input type="radio" name="${technologies[i]}" class="expert"></td>`;
+//     techbody.appendChild(newrow);
+//   }
+// }
+// generatetech();
+// function removerow() {
+//   console.log("hii");
 
-  const table = document
-    .getElementById("container")
-    .getElementsByTagName("tbody")[0];
-  if (table.rows.length > 1) {
-    const lastrow = table.rows[table.rows.length - 1];
-    table.removeChild(lastrow);
-  }
-}
+//   const table = document
+//     .getElementById("container")
+//     .getElementsByTagName("tbody")[0];
+//   if (table.rows.length > 1) {
+//     const lastrow = table.rows[table.rows.length - 1];
+//     table.removeChild(lastrow);
+//   }
+// }
+
+
+
+
+
+ let techIndex = 0
+        function addTech() {
+            techIndex++
+
+            let tbody = document.querySelector("#techtable tbody")
+            let newrow = document.createElement("tr")
+
+            newrow.innerHTML = `<td>
+        <select name="technologies[${techIndex}][tech_id]" >
+          <% techDetails.forEach(t=>{ %>
+          <option value="<%= t.tech_id %>"><%= t.tech_name %></option>
+                    <% })%>
+        </select>
+        </td>
+        <td>
+        <input type="radio" name="technologies[${techIndex}][beginner]" value="<%= t.tech_id %>">
+        </td>
+
+        <td>
+        <input type="radio" name="technologies[${techIndex}][intermediate]" value="<%= t.tech_id %>">
+        </td>
+
+        <td>
+        <input type="radio" name="technologies[${techIndex}][expert]" value="<%= t.tech_id %>">
+        </td>`
+
+         tbody.appendChild(newrow)
+        }
 function addrow() {
   // console.log("hii");
 
