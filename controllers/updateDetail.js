@@ -1,30 +1,10 @@
 import db from "../db.js";
-const insertData = async (req, res) => {
-  const {
-    fname,
-    lname,
-    des,
-    add1,
-    email,
-    add2,
-    phone,
-    city,
-    state,
-    zip,
-    relstatus,
-    gender = gender === "Male" ? "M" : "F",
-    dob,
-  } = req.body;
 
-  let conn;
-
+export const updateData = async (req, res) => {
   try {
-    conn = await db.getConnection();
-    await conn.beginTransaction();
-    const query = `INSERT INTO basic_details(first_name,last_name,designation,email,contact,gender,dob,relationship,address1,address2,city,state,zipcode) values (?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    const applicantId = req.params.applicantId;
 
-    // console.log(req.body);
-    const [result] = await db.query(query, [
+    const {
       fname,
       lname,
       des,
@@ -38,31 +18,57 @@ const insertData = async (req, res) => {
       city,
       state,
       zip,
-    ]);
+    } = req.body;
 
-    const applicantId = result.insertId;
+    //update basic details
+
+    await db.query(
+      `update basic_details set first_name=?,last_name=?,designation=?,email=?,contact=?,gender=?,dob=?,relationship=?,address1=?,address2=?,city=?,state=?,zipcode=? where applicant_id=?`,
+      [
+        fname,
+        lname,
+        des,
+        email,
+        phone,
+        gender,
+        dob,
+        relstatus,
+        add1,
+        add2,
+        city,
+        state,
+        zip,
+      ],
+    );
 
     //education
-    // console.log(req.body.education);
+    await db.query(`delete from education_details where applicant_id=?`, [
+      applicantId,
+    ]);
 
     for (const edu of req.body.education)
-      await conn.query(
+      await db.query(
         `insert into education_details(applicant_id,ed_id,board_name,passing_year,percentage) values (?,?,?,?,?)`,
-        [applicantId, edu.ed_id, edu.board_name, edu.pass_year,edu.percent],
+        [applicantId, edu.ed_id, edu.board_name, edu.pass_year, edu.percent],
       );
 
-    //work expirience
-    // console.log(req.body.work);
+    //work experience
+    await db.query(`delete from work_experience where applicant_id=?`, [
+      applicantId,
+    ]);
     for (const w of req.body.work)
-      await conn.query(
+      await db.query(
         `insert into work_experience(applicant_id,company_name,designation,from_date,to_date) values (?,?,?,?,?)`,
         [applicantId, w.company_name, w.designation, w.from_date, w.to_date],
       );
 
     //languages
-    // console.log(req.body.languages);
+    await db.query(`delete from student_languages where applicant_id=?`, [
+      applicantId,
+    ]);
+      // console.log(req.body.languages);
     for (const l of req.body.languages)
-      await conn.query(
+      await db.query(
         `insert into student_languages(applicant_id,lang_id, can_read, can_write, can_speak) values (?,?,?,?,?)`,
         [
           applicantId,
@@ -72,11 +78,13 @@ const insertData = async (req, res) => {
           l.speak ? 1 : 0,
         ],
       );
-
     //technologies
-    // console.log(req.body.technologies);
+    await db.query(`delete from student_technologies where applicant_id=?`, [
+      applicantId,
+    ]);
+      // console.log(req.body.technologies);
     for (const t of req.body.technologies)
-      await conn.query(
+      await db.query(
         `insert into student_technologies (applicant_id,tech_id,is_beginner,is_intermediate,is_expert) VALUES (?,?,?,?,?)`,
         [
           applicantId,
@@ -86,15 +94,22 @@ const insertData = async (req, res) => {
           t.proficiency_level=="expert"  ? 1 : 0,
         ],
       );
-
     //references
-    await conn.query(
+    await db.query(`delete from reference_contacts where applicant_id=?`, [
+      applicantId,
+    ]);
+    //  console.log(req.body.references);
+    await db.query(
       `insert into reference_contacts(applicant_id,ref_name,contact_number,relation) values (?,?,?,?) `,
       [applicantId, req.body.rname, req.body.rphn, req.body.rrel],
     );
 
     //preferences
-    await conn.query(
+    await db.query(`delete from preferences where applicant_id=?`, [
+      applicantId,
+    ]);
+    //  console.log(req.body.preferences);
+     await db.query(
       `insert into preferences(applicant_id,preferred_location,notice_period,department,expected_ctc,current_ctc) values (?,?,?,?,?,?) `,
       [
         applicantId,
@@ -105,15 +120,9 @@ const insertData = async (req, res) => {
         req.body.cctc,
       ],
     );
-    await conn.commit();
-
-    res.send("Application saved");
+    res.redirect("/display",`${applicantId}`)
   } catch (err) {
-    await conn.rollback();
     console.error(err);
     res.status(500).send(err.message);
-  } finally {
-    conn.release();
   }
 };
-export default insertData;

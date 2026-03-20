@@ -32,7 +32,7 @@ ed_id bigint not null,
 board_name varchar(100) not null,
 passing_year char(4) not null,
 percentage decimal(5,2) not null,
-foreign key(applicant_id) references basic_details(applicant_id),
+foreign key(applicant_id) references basic_details(applicant_id) on delete cascade,
 foreign key(ed_id) references education(ed_id)
 );
 select * from basic_details;
@@ -46,7 +46,7 @@ CREATE TABLE work_experience (
     designation VARCHAR(100) not null,
     from_date DATE not null,
     to_date DATE not null,
-    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id)
+    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id) on delete cascade
 );
 
 CREATE TABLE languages (
@@ -61,7 +61,7 @@ CREATE TABLE student_languages (
     can_read BOOLEAN NOT NULL,
     can_write BOOLEAN NOT NULL,
     can_speak BOOLEAN NOT NULL,
-    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id),
+    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id) on delete cascade,
     FOREIGN KEY (lang_id) REFERENCES languages(lang_id)
 );
 
@@ -77,7 +77,7 @@ CREATE TABLE student_technologies (
 	is_beginner boolean not null,
     is_intermediate boolean not null,
     is_expert boolean not null,
-    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id),
+    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id) on delete cascade,
     FOREIGN KEY (tech_id) REFERENCES technologies (tech_id)
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE reference_contacts (
     ref_name VARCHAR(100) not null,
     contact_number VARCHAR(15) not null,
     relation VARCHAR(50) not null,
-    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id)
+    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id) on delete cascade
 );
 
 CREATE TABLE preferences (
@@ -102,13 +102,27 @@ CREATE TABLE preferences (
     department VARCHAR(100) not null,
     expected_ctc DECIMAL(10, 2) not null,
     current_ctc decimal(10,2) not null,
-    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id)
+    FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id) on delete cascade
 );
 
 drop table preferences;
- drop table education_details;
- SET FOREIGN_KEY_CHECKS = 0;
- show tables;
- select * from languages;
- drop database job_application;	
- insert into languages (language_name) values("hindi")
+drop table education_details;
+SET FOREIGN_KEY_CHECKS = 0;
+show tables;
+select * from languages;
+drop database job_application;	
+select * from basic_details;
+select * from education_details;
+select * from education;
+insert into languages (language_name) values("hindi");
+ 
+truncate table basic_details;
+truncate table education;
+truncate table education_details;
+truncate table languages;
+truncate table student_languages;
+truncate table technologies;
+truncate table student_technologies;
+truncate table reference_contacts;
+truncate table preferences;
+truncate table work_experience;
