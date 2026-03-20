@@ -31,8 +31,8 @@ export const editApplicant = async (req, res) => {
       [applicantId]
     );
     
-    const [references] = await db.query("SELECT * FROM references WHERE applicant_id = ?",[applicantId]);
-    const[preferences] = await db.query("SELECT * FROM preferences WHERE applicant_id = ?",[applicantId])
+    const [reference_contacts] = await db.query("SELECT * FROM reference_contacts WHERE applicant_id = ?",[applicantId]);
+    const [preferences] = await db.query("SELECT * FROM preferences WHERE applicant_id = ?",[applicantId])
 
     const [edDetails] = await db.query("SELECT * FROM education");
     const [techDetails] = await db.query("SELECT * FROM technologies");
@@ -44,7 +44,7 @@ export const editApplicant = async (req, res) => {
       work:work,
       lan:languages,
       tec:technologies,
-      ref:references,
+      ref:reference_contacts,
       pref:preferences,
       edDetails:edDetails,
       techDetails:techDetails,

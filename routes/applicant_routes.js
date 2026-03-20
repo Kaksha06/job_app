@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
 router.get("/display",displayData);
 router.post("/insert", insertData);
 router.get("/view/:applicantId", readDetails);
-router.post("/delete/:applicantId",deleteDetail);
+router.get("/delete/:applicantId",deleteDetail);
 
 router.get("/edit/:applicantId",editApplicant)
 router.post("/update/:applicantId",updateData)

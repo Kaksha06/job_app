@@ -35,7 +35,7 @@ const readDetails = async (req, res) => {
     // console.log(eduDetails[0]);
 
     //languages
-    const langQuery = `select l.student_lang_id,l.applicant_id,l.can_read,l.can_write,l.can_speak,lang.lang_id
+    const langQuery = `select l.student_lang_id,l.applicant_id,l.can_read,l.can_write,l.can_speak,lang.lang_id,lang.language_name
     from student_languages l
     join languages lang
     on l.lang_id = lang.lang_id
@@ -65,11 +65,11 @@ const [langDetails] = await db.query(langQuery, [applicantId]);
     
     res.render("readDetails",{
         basic:basicDetails[0],
-        edu:eduDetails[0],
-        lan:langDetails[0],
-        work:workDetails[0],
-        tec:techDetails[0],
-        ref:refDeails[0],
+        edu:eduDetails,
+        lan:langDetails,
+        work:workDetails,
+        tec:techDetails,
+        ref:refDeails,
         pref:prefDetails[0]
     })
   } catch (err) {

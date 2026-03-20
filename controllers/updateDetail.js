@@ -38,6 +38,7 @@ export const updateData = async (req, res) => {
         city,
         state,
         zip,
+        applicantId
       ],
     );
 

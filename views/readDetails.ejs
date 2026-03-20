@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <h2>📋 Job Application Details</h2>
+  <h2>Job Application Details</h2>
 
   <!-- Basic Details -->
   <fieldset>
@@ -45,7 +45,7 @@
         </tr>
         <tr>
           <td><strong>DOB:</strong></td>
-          <td><%= basic.dob %></td>
+          <td><%= new Date(basic.dob).toLocaleDateString('en-IN') %></td>
           <td><strong>Relationship:</strong></td>
           <td><%= basic.relationship %></td>
         </tr>
@@ -72,7 +72,7 @@
   </fieldset>
 
   <!-- Education -->
-  <fieldset>
+  <!-- <fieldset>
     <legend>Education Details</legend>
     <% if (edu && edu.length) { %>
       <table>
@@ -98,7 +98,18 @@
     <% } else { %>
       <p class="empty">No education records.</p>
     <% } %>
-  </fieldset>
+  </fieldset> -->
+  <fieldset>
+    <legend>Education</legend>
+    <% edu.forEach(e => { %>
+        <p>
+            <strong><%= e.ed_name %></strong><br>
+            Board/University: <%= e.board_name %><br>
+            Passing Year: <%= e.passing_year %> | Percentage: <%= e.percentage %>%
+        </p>
+        <hr>
+    <% }) %>
+</fieldset>
 
   <!-- Work Experience -->
   <fieldset>
@@ -118,8 +129,8 @@
             <tr>
               <td><%= item.company_name %></td>
               <td><%= item.designation %></td>
-              <td><%= item.from_date %></td>
-              <td><%= item.to_date %></td>
+              <td><%= new Date(item.from_date).toLocaleDateString('en-IN') %></td>
+              <td><%= new Date(item.to_date).toLocaleDateString('en-IN') %></td>
             </tr>
           <% }) %>
         </tbody>
@@ -145,7 +156,7 @@
         <tbody>
           <% lan.forEach(item => { %>
             <tr>
-              <td><%= item.language_name || 'Language-' + item.lang_id %></td>
+              <td><%= item.language_name %></td>
               <td><span class="<%= item.can_read ? 'yes' : 'no' %>"><%= item.can_read ? 'Yes' : 'No' %></span></td>
               <td><span class="<%= item.can_write ? 'yes' : 'no' %>"><%= item.can_write ? 'Yes' : 'No' %></span></td>
               <td><span class="<%= item.can_speak ? 'yes' : 'no' %>"><%= item.can_speak ? 'Yes' : 'No' %></span></td>
