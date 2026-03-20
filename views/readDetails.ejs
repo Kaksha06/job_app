@@ -1,11 +1,250 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Data</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Applicant Details</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+    fieldset { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; }
+    legend { font-weight: bold; padding: 0 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f5f5f5; }
+    .yes { color: green; font-weight: bold; }
+    .no { color: red; }
+    .empty { color: #999; font-style: italic; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; background: #e9ecef; }
+  </style>
 </head>
 <body>
-    
+  <h2>📋 Job Application Details</h2>
+
+  <!-- Basic Details -->
+  <fieldset>
+    <legend>Basic Information</legend>
+    <% if (basic && Object.keys(basic).length) { %>
+      <table>
+        <tr>
+          <td><strong>First Name:</strong></td>
+          <td><%= basic.first_name %></td>
+          <td><strong>Last Name:</strong></td>
+          <td><%= basic.last_name %></td>
+        </tr>
+        <tr>
+          <td><strong>Designation:</strong></td>
+          <td><%= basic.designation %></td>
+          <td><strong>Email:</strong></td>
+          <td><%= basic.email %></td>
+        </tr>
+        <tr>
+          <td><strong>Contact:</strong></td>
+          <td><%= basic.contact %></td>
+          <td><strong>Gender:</strong></td>
+          <td><%= basic.gender %></td>
+        </tr>
+        <tr>
+          <td><strong>DOB:</strong></td>
+          <td><%= basic.dob %></td>
+          <td><strong>Relationship:</strong></td>
+          <td><%= basic.relationship %></td>
+        </tr>
+        <tr>
+          <td><strong>Address 1:</strong></td>
+          <td colspan="3"><%= basic.address1 %></td>
+        </tr>
+        <tr>
+          <td><strong>Address 2:</strong></td>
+          <td colspan="3"><%= basic.address2 %></td>
+        </tr>
+        <tr>
+          <td><strong>City:</strong></td>
+          <td><%= basic.city %></td>
+          <td><strong>State:</strong></td>
+          <td><%= basic.state %></td>
+          <td><strong>Zipcode:</strong></td>
+          <td><%= basic.zipcode %></td>
+        </tr>
+      </table>
+    <% } else { %>
+      <p class="empty">No basic details found.</p>
+    <% } %>
+  </fieldset>
+
+  <!-- Education -->
+  <fieldset>
+    <legend>Education Details</legend>
+    <% if (edu && edu.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Name of Board</th>
+            <th>Passing Year</th>
+            <th>Percentage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% edu.forEach(item => { %>
+            <tr>
+              <td><%= item.ed_name %></td>
+              <td><%= item.board_name %></td>
+              <td><%= item.passing_year %></td>
+              <td><%= item.percentage %>%</td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p class="empty">No education records.</p>
+    <% } %>
+  </fieldset>
+
+  <!-- Work Experience -->
+  <fieldset>
+    <legend>Work Experience</legend>
+    <% if (work && work.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Designation</th>
+            <th>From Date</th>
+            <th>To Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% work.forEach(item => { %>
+            <tr>
+              <td><%= item.company_name %></td>
+              <td><%= item.designation %></td>
+              <td><%= item.from_date %></td>
+              <td><%= item.to_date %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p class="empty">No work experience added.</p>
+    <% } %>
+  </fieldset>
+
+  <!-- Languages -->
+  <fieldset>
+    <legend>Languages Known</legend>
+    <% if (lan && lan.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Language Name</th>
+            <th>Read</th>
+            <th>Write</th>
+            <th>Speak</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% lan.forEach(item => { %>
+            <tr>
+              <td><%= item.language_name || 'Language-' + item.lang_id %></td>
+              <td><span class="<%= item.can_read ? 'yes' : 'no' %>"><%= item.can_read ? 'Yes' : 'No' %></span></td>
+              <td><span class="<%= item.can_write ? 'yes' : 'no' %>"><%= item.can_write ? 'Yes' : 'No' %></span></td>
+              <td><span class="<%= item.can_speak ? 'yes' : 'no' %>"><%= item.can_speak ? 'Yes' : 'No' %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p class="empty">No language records.</p>
+    <% } %>
+  </fieldset>
+
+  <!-- Technologies -->
+  <fieldset>
+    <legend>Technologies Known</legend>
+    <% if (tec && tec.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Technology Name</th>
+            <th>Proficiency Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tec.forEach(item => { %>
+            <tr>
+              <td><%= item.tech_name %></td>
+              <td>
+                <% if (item.is_expert) { %>
+                  <span class="badge">Expert</span>
+                <% } else if (item.is_intermediate) { %>
+                  <span class="badge">Intermediate</span>
+                <% } else if (item.is_beginner) { %>
+                  <span class="badge">Beginner</span>
+                <% } else { %>
+                  <span class="badge">-</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p class="empty">No technologies listed.</p>
+    <% } %>
+  </fieldset>
+
+  <!-- References -->
+  <fieldset>
+    <legend>Reference Contacts</legend>
+    <% if (ref && ref.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Contact Number</th>
+            <th>Relation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% ref.forEach(item => { %>
+            <tr>
+              <td><%= item.ref_name %></td>
+              <td><%= item.contact_number %></td>
+              <td><%= item.relation %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p class="empty">No references added.</p>
+    <% } %>
+  </fieldset>
+
+  <!-- Preferences -->
+  <fieldset>
+    <legend>Job Preferences</legend>
+    <% if (pref && Object.keys(pref).length) { %>
+      <table>
+        <tr>
+          <td><strong>Preferred Location:</strong></td>
+          <td><%= pref.preferred_location %></td>
+          <td><strong>Notice Period:</strong></td>
+          <td><%= pref.notice_period %></td>
+        </tr>
+        <tr>
+          <td><strong>Department:</strong></td>
+          <td><%= pref.department %></td>
+          <td><strong>Expected CTC:</strong></td>
+          <td>₹<%= pref.expected_ctc %></td>
+        </tr>
+        <tr>
+          <td><strong>Current CTC:</strong></td>
+          <td colspan="3">₹<%= pref.current_ctc %></td>
+        </tr>
+      </table>
+    <% } else { %>
+      <p class="empty">No preferences set.</p>
+    <% } %>
+  </fieldset>
 </body>
 </html>

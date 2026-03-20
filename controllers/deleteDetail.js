@@ -10,7 +10,6 @@ const deleteDetail = async (req,res) => {
         res.redirect("/")
     } catch (error) {
         console.error(error);
-        
     }
 }
 export default deleteDetail;
