@@ -1,315 +1,452 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Applicant</title>
-    <style>
-      body { font-family: sans-serif; padding: 20px; }
-      input, select { margin: 5px; padding: 5px; }
-      table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
-      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-      th { background-color: #f2f2f2; }
-      fieldset { margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; }
-      legend { font-weight: bold; padding: 0 5px; }
-      span { color: red; font-size: 0.8em; }
-      .addbtn { background-color: #4CAF50; color: white; border: none; padding: 10px; cursor: pointer; }
-      button[type="submit"] { background-color: #008CBA; color: white; border: none; padding: 15px 32px; font-size: 16px; cursor: pointer; }
-    </style>
-  </head>
-  <body>
-    <h2>Edit Job Application</h2>
-    
-    <!-- Form Start -->
-    <form method="post" action="/update/<%= basic.applicant_id %>" novalidate>
-      
-      <fieldset>
-        <legend>Basic Detail</legend>
-        <table>
-          <tr>
-            <td><label for="fname">First Name</label></td>
-            <td><input type="text" id="fname" name="fname" value="<%= basic.first_name %>" pattern="[A-Za-z\s]+" title="Only letters are allowed" required/></td>
-            <td><label for="lname">Last Name</label></td>
-            <td><input type="text" id="lname" name="lname" value="<%= basic.last_name %>" pattern="[A-Za-z\s]+" title="Only letters are allowed" required /></td>
-          </tr>
-          <tr>
-            <td><label for="des">Designation</label></td>
-            <td><input type="text" id="des" name="des" value="<%= basic.designation %>" /></td>
-            <td><label for="add1">Address 1</label></td>
-            <td><input type="text" id="add1" name="add1" value="<%= basic.address1 %>" /></td>
-          </tr>
-          <tr>
-            <td><label for="email">Email</label></td>
-            <td><input type="email" id="email" name="email" value="<%= basic.email %>" required/></td>
-            <td><label for="add2">Address 2</label></td>
-            <td><input type="text" id="add2" name="add2" value="<%= basic.address2 %>" /></td>
-          </tr>
-          <tr>
-            <td><label for="phone">Phone Number</label></td>
-            <td><input type="text" id="phone" name="phone" value="<%= basic.contact %>" pattern="[6-9]{1}[0-9]{9}" required /></td>
-            <td><label for="city">City</label></td>
-            <td><input type="text" id="city" name="city" value="<%= basic.city %>" /></td>
-          </tr>
-          <tr>
-            <td><label for="state">State</label></td>
-            <td>
-              <select name="state" id="state">
-                <option value="">-- Select State --</option>
-                <option value="Gujarat" <%= basic.state === 'Gujarat' ? 'selected' : '' %>>Gujarat</option>
-                <option value="Maharashtra" <%= basic.state === 'Maharashtra' ? 'selected' : '' %>>Maharashtra</option>
-              </select>
-            </td>
-            <td><label for="zip">Zipcode</label></td>
-            <td><input type="text" id="zip" name="zip" value="<%= basic.zipcode %>" pattern="[0-9]{6}" required> <span id="zip_error"></span></td>
-          </tr>
-          <tr>
-            <td><label for="relstatus">Relationship Status</label></td>
-            <td>
-              <select name="relstatus" id="relstatus">
-                <option value="single" <%= basic.relationship_status === 'single' ? 'selected' : '' %>>Single</option>
-                <option value="married" <%= basic.relationship_status === 'married' ? 'selected' : '' %>>Married</option>
-                <option value="divorced" <%= basic.relationship_status === 'divorced' ? 'selected' : '' %>>Divorced</option>
-              </select>
-            </td>
-            <td><label>Gender</label></td>
-            <td>
-              <input type="radio" id="male" name="gender" value="M" <%= basic.gender === 'M' ? 'checked' : '' %> /> <label for="male">Male</label>
-              <input type="radio" id="female" name="gender" value="F" <%= basic.gender === 'F' ? 'checked' : '' %> /> <label for="female">Female</label>
-            </td>
-          </tr>
-          <tr>
-            <td><label for="dob">DOB</label></td>
-            <td><input type="date" id="dob" name="dob" value="<%= basic.dob ? basic.dob.toISOString().split('T')[0] : '' %>" /></td>
-          </tr>
-        </table>
-      </fieldset>
 
-      <!-- Education Form -->
-      <fieldset>
-        <legend>Education Details</legend>
-        <table>
-          <thead>
-            <tr>
-              <th>Course</th>
-              <th>Name of Board</th>
-              <th>Passing Year</th>
-              <th>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if(edu && edu.length > 0) { %>
-              <% edu.forEach((e, index) => { %>
-                <tr>
-                  <td>
-                    <select name="education[<%= index %>][ed_id]">
-                      <% edDetails.forEach((ed) => { %>
-                        <option value="<%= ed.ed_id %>" <%= e.ed_id == ed.ed_id ? 'selected' : '' %>><%= ed.ed_name %></option>
-                      <% }) %>
-                    </select>
-                  </td>
-                  <td><input type="text" name="education[<%= index %>][board_name]" value="<%= e.board_name %>"></td>
-                  <td><input type="text" name="education[<%= index %>][passing_year]" value="<%= e.passing_year %>"></td>
-                  <td><input type="number" name="education[<%= index %>][percentage]" value="<%= e.percentage %>"></td>
-                </tr>
-              <% }) %>
-            <% } else { %>
-              <!-- Fallback if no education data exists yet -->
-              <tr>
-                <td><select name="education[0][ed_id]"><% edDetails.forEach(d => { %><option value="<%= d.ed_id %>"><%= d.ed_name %></option><% }) %></select></td>
-                <td><input type="text" name="education[0][board_name]"></td>
-                <td><input type="text" name="education[0][pass_year]"></td>
-                <td><input type="number" name="education[0][percent]"></td>
-              </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </fieldset>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Applicant</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
 
-      <!-- Work Experience -->
-      <fieldset>
-        <legend>Work Experience</legend>
-        <table id="container">
-          <thead>
-            <tr>
-              <th>Company Name</th>
-              <th>Designation</th>
-              <th>From Date</th>
-              <th>To Date</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if(work && work.length > 0) { %>
-              <% work.forEach((w, index) => { %>
-                <tr>
-                  <td><input type="text" name="work[<%= index %>][company_name]" value="<%= w.company_name %>" pattern="[A-Za-z ]{3,}" required /></td>
-                  <td><input type="text" name="work[<%= index %>][designation]" value="<%= w.designation %>" pattern="[A-Za-z ]{2,}" required/></td>
-                  <td><input type="date" name="work[<%= index %>][from_date]" value="<%= w.from_date ? w.from_date.toISOString().split('T')[0]:'' %>" required /></td>
-                  <td><input type="date" name="work[<%= index %>][to_date]" value="<%= w.to_date ? w.to_date.toISOString().split('T')[0]:'' %>" required /></td>
-                  <td><button type="button" onclick="removerow(this)">remove</button></td>
-                </tr>
-              <% }) %>
-            <% } else { %>
-               <tr>
-                  <td><input type="text" name="work[0][company_name]" pattern="[A-Za-z ]{3,}" required /></td>
-                  <td><input type="text" name="work[0][designation]" pattern="[A-Za-z ]{2,}" required/></td>
-                  <td><input type="date" name="work[0][from_date]" required /></td>
-                  <td><input type="date" name="work[0][to_date]" required /></td>
-                  <td><button type="button" onclick="removerow(this)">remove</button></td>
-                </tr>
-            <% } %>
-          </tbody>
-        </table>
-        <button type="button" onclick="addrow()" class="addbtn">Add Row</button>
-      </fieldset>
+    input,
+    select {
+      margin: 5px;
+      padding: 5px;
+    }
 
-      <!-- Language -->
-      <fieldset>
-        <legend>Language Known</legend>
-        <table id="langtable">
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    fieldset {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+    }
+
+    legend {
+      font-weight: bold;
+      padding: 0 5px;
+    }
+
+    span {
+      color: red;
+      font-size: 0.8em;
+    }
+
+    .addbtn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    button[type="submit"] {
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      padding: 15px 32px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Edit Job Application</h2>
+
+  <!-- Form Start -->
+  <form method="post" action="/update/<%= basic.applicant_id %>" novalidate>
+
+    <fieldset>
+      <legend>Basic Detail</legend>
+      <table>
+        <tr>
+          <td><label for="fname">First Name</label></td>
+          <td><input type="text" id="fname" name="fname" value="<%= basic.first_name %>" pattern="[A-Za-z\s]+"
+              title="Only letters are allowed" required /></td>
+          <td><label for="lname">Last Name</label></td>
+          <td><input type="text" id="lname" name="lname" value="<%= basic.last_name %>" pattern="[A-Za-z\s]+"
+              title="Only letters are allowed" required /></td>
+        </tr>
+        <tr>
+          <td><label for="des">Designation</label></td>
+          <td><input type="text" id="des" name="des" value="<%= basic.designation %>" /></td>
+          <td><label for="add1">Address 1</label></td>
+          <td><input type="text" id="add1" name="add1" value="<%= basic.address1 %>" /></td>
+        </tr>
+        <tr>
+          <td><label for="email">Email</label></td>
+          <td><input type="email" id="email" name="email" value="<%= basic.email %>" required /></td>
+          <td><label for="add2">Address 2</label></td>
+          <td><input type="text" id="add2" name="add2" value="<%= basic.address2 %>" /></td>
+        </tr>
+        <tr>
+          <td><label for="phone">Phone Number</label></td>
+          <td><input type="text" id="phone" name="phone" value="<%= basic.contact %>" pattern="[6-9]{1}[0-9]{9}"
+              required /></td>
+          <td><label for="city">City</label></td>
+          <td><input type="text" id="city" name="city" value="<%= basic.city %>" /></td>
+        </tr>
+        <tr>
+          <td><label for="state">State</label></td>
+          <td>
+            <select name="state" id="state">
+              <option value="">-- Select State --</option>
+              <option value="Gujarat" <%=basic.state==='Gujarat' ? 'selected' : '' %>>Gujarat</option>
+              <option value="Maharashtra" <%=basic.state==='Maharashtra' ? 'selected' : '' %>>Maharashtra</option>
+            </select>
+          </td>
+          <td><label for="zip">Zipcode</label></td>
+          <td><input type="text" id="zip" name="zip" value="<%= basic.zipcode %>" pattern="[0-9]{6}" required> <span
+              id="zip_error"></span></td>
+        </tr>
+        <tr>
+          <td><label for="relstatus">Relationship Status</label></td>
+          <td>
+            <select name="relstatus" id="relstatus">
+              <option value="single" <%=basic.relationship_status==='single' ? 'selected' : '' %>>Single</option>
+              <option value="married" <%=basic.relationship_status==='married' ? 'selected' : '' %>>Married</option>
+              <option value="divorced" <%=basic.relationship_status==='divorced' ? 'selected' : '' %>>Divorced</option>
+            </select>
+          </td>
+          <td><label>Gender</label></td>
+          <td>
+            <input type="radio" id="male" name="gender" value="M" <%=basic.gender==='M' ? 'checked' : '' %> /> <label
+              for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="F" <%=basic.gender==='F' ? 'checked' : '' %> /> <label
+              for="female">Female</label>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="dob">DOB</label></td>
+          <td><input type="date" id="dob" name="dob"
+              value="<%= basic.dob ? basic.dob.toISOString().split('T')[0] : '' %>" /></td>
+        </tr>
+      </table>
+    </fieldset>
+
+    <!-- Education Form -->
+    <fieldset>
+      <legend>Education Details</legend>
+      <table>
+        <thead>
           <tr>
-            <th>Language Name</th>
-            <th>Read</th>
-            <th>Write</th>
-            <th>Speak</th>
+            <th>Course</th>
+            <th>Name of Board</th>
+            <th>Passing Year</th>
+            <th>Percentage</th>
           </tr>
-          <% if(lan && lan.length > 0) { %>
-            <% langDetails.forEach((l, i) => { %>
+        </thead>
+        <tbody>
+          <% if(edu && edu.length> 0) { %>
+            <% edu.forEach((e, i)=> { %>
               <tr>
                 <td>
-                  <%= l.language_name %>
-                <input type="hidden" name="languages[<%= i %>][lang_id]" value="<%= l.lang_id %>">
-                </td>
-                <td><input type="checkbox" name="languages[<%= i %>][read]" value="1" <%= l.can_read ? 'checked' : '' %>></td>
-                <td><input type="checkbox" name="languages[<%= i %>][write]" value="1" <%= l.can_write ? 'checked' : '' %>></td>
-                <td><input type="checkbox" name="languages[<%= i %>][speak]" value="1" <%= l.can_speak ? 'checked' : '' %>></td>
-              </tr>
-            <% }) %>
-          <% } %>
-        </table>
-      </fieldset>
-
-      <!-- Technologies -->
-      <fieldset>
-        <legend>Technologies Known</legend>
-        <table id="techtable">
-          <thead>
-            <tr>
-              <th>Technology Name</th>
-              <th>Beginner</th>
-              <th>Intermediate</th>
-              <th>Expert</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if(tec && tec.length > 0) { %>
-              <% tec.forEach((t, i) => { %>
-                <tr>
-                  <td>
-                    <select name="technologies[<%= i %>][tech_id]">
-                      <% techDetails.forEach(master => { %>
-                        <option value="<%= master.tech_id %>" <%= t.tech_id == master.tech_id ? 'selected' : '' %>><%= master.tech_name %></option>
+                  <select name="education[<%= i %>][ed_id]">
+                    <% edDetails.forEach((ed)=> { %>
+                      <option value="<%= ed.ed_id %>" <%=e.ed_id==ed.ed_id ? 'selected' : '' %>>
+                        <%= ed.ed_name %>
+                      </option>
                       <% }) %>
-                    </select>
-                  </td>
-                  <td><input type="radio" name="technologies[<%= i %>][proficiency_level]" value="beginner" <%= t.proficiency_level === 'beginner' ? 'checked' : '' %>></td>
-                  <td><input type="radio" name="technologies[<%= i %>][proficiency_level]" value="intermediate" <%= t.proficiency_level === 'intermediate' ? 'checked' : '' %>></td>
-                  <td><input type="radio" name="technologies[<%= i %>][proficiency_level]" value="expert" <%= t.proficiency_level === 'expert' ? 'checked' : '' %>></td>
-                </tr>
+                  </select>
+                </td>
+
+                <td>
+                  <input type="text" name="education[<%= i %>][board_name]" value="<%= e.board_name %>">
+                </td>
+
+                <td>
+                  <input type="text" name="education[<%= i %>][passing_year]" value="<%= e.passing_year %>">
+                </td>
+
+                <td>
+                  <input type="number" name="education[<%= i %>][percentage]" value="<%= e.percentage %>">
+                </td>
+              </tr>
               <% }) %>
-            <% } %>
-          </tbody>
-        </table>
-        <button type="button" id="techbtn" onclick="addTech()">Add Technology</button>
-      </fieldset>
 
-      <!-- Reference -->
-      <fieldset>
-        <legend>Reference Contact</legend>
-        <table>
-          <% if(ref && ref.length > 0) { %>
-            <% ref.forEach((r, i) => { %>
+                <% } else { %>
+
+                  <!-- fallback -->
+                  <tr>
+                    <td>
+                      <select name="education[0][ed_id]">
+                        <% edDetails.forEach(d=> { %>
+                          <option value="<%= d.ed_id %>">
+                            <%= d.ed_name %>
+                          </option>
+                          <% }) %>
+                      </select>
+                    </td>
+
+                    <td><input type="text" name="education[0][board_name]"></td>
+                    <td><input type="text" name="education[0][passing_year]"></td>
+                    <td><input type="number" name="education[0][percentage]"></td>
+                  </tr>
+
+                  <% } %>
+        </tbody>
+      </table>
+    </fieldset>
+
+    <!-- Work Experience -->
+    <fieldset>
+      <legend>Work Experience</legend>
+      <table id="container">
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Designation</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if(work && work.length> 0) { %>
+            <% work.forEach((w, index)=> { %>
               <tr>
-                <td><label>Name</label><br><input type="text" name="references[<%= i %>][name]" value="<%= r.name %>" pattern="[A-Za-z ]{3,}"></td>
-                <td><label>Contact</label><br><input type="text" name="references[<%= i %>][contact]" value="<%= r.contact %>" pattern="[0-9]{10}"></td>
-                <td><label>Relation</label><br><input type="text" name="references[<%= i %>][relation]" value="<%= r.relation %>" pattern="[A-Za-z ]{3,}"></td>
+                <td><input type="text" name="work[<%= index %>][company_name]" value="<%= w.company_name %>"
+                    pattern="[A-Za-z ]{3,}" required /></td>
+                <td><input type="text" name="work[<%= index %>][designation]" value="<%= w.designation %>"
+                    pattern="[A-Za-z ]{2,}" required /></td>
+                <td><input type="date" name="work[<%= index %>][from_date]"
+                    value="<%= w.from_date ? w.from_date.toISOString().split('T')[0]:'' %>" required /></td>
+                <td><input type="date" name="work[<%= index %>][to_date]"
+                    value="<%= w.to_date ? w.to_date.toISOString().split('T')[0]:'' %>" required /></td>
+                <td><button type="button" onclick="removerow(this)">remove</button></td>
               </tr>
+              <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td><input type="text" name="work[0][company_name]" pattern="[A-Za-z ]{3,}" required /></td>
+                    <td><input type="text" name="work[0][designation]" pattern="[A-Za-z ]{2,}" required /></td>
+                    <td><input type="date" name="work[0][from_date]" required /></td>
+                    <td><input type="date" name="work[0][to_date]" required /></td>
+                    <td><button type="button" onclick="removerow(this)">remove</button></td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+      <button type="button" onclick="addrow()" class="addbtn">Add Row</button>
+    </fieldset>
+
+    <!-- Language -->
+    <fieldset>
+      <legend>Language Known</legend>
+      <table id="langtable">
+        <tr>
+          <th>Language Name</th>
+          <th>Read</th>
+          <th>Write</th>
+          <th>Speak</th>
+        </tr>
+        <% if(lan && lan.length> 0) { %>
+          <% langDetails.forEach((lang, i)=> {
+            const selected = lan.find(l=>l.lang_id===lang.lang_id);
+            %>
+            <tr>
+              <td>
+                <%= lang.language_name %>
+                  <input type="hidden" name="languages[<%= i %>][lang_id]" value="<%= lang.lang_id %>">
+              </td>
+              <td>
+                <input type="checkbox" name="languages[<%= i %>][read]" value="1" <%=selected && selected.can_read
+                  ? 'checked' : '' %>>
+              </td>
+              <td><input type="checkbox" name="languages[<%= i %>][write]" value="1" <%=selected && selected.can_write
+                  ? 'checked' : '' %>>
+              </td>
+              <td><input type="checkbox" name="languages[<%= i %>][speak]" value="1" <%=selected && selected.can_speak
+                  ? 'checked' : '' %>>
+              </td>
+            </tr>
             <% }) %>
-          <% } else { %>
-             <tr>
-                <td><label>Name</label><br><input type="text" name="references[0][name]" pattern="[A-Za-z ]{3,}"></td>
-                <td><label>Contact</label><br><input type="text" name="references[0][contact]" pattern="[0-9]{10}"></td>
-                <td><label>Relation</label><br><input type="text" name="references[0][relation]" pattern="[A-Za-z ]{3,}"></td>
+              <% } %>
+      </table>
+    </fieldset>
+
+    <!-- Technologies -->
+    <fieldset>
+      <legend>Technologies Known</legend>
+      <table id="techtable">
+        <thead>
+          <tr>
+            <th>Technology Name</th>
+            <th>Beginner</th>
+            <th>Intermediate</th>
+            <th>Expert</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if(tec && tec.length> 0) { %>
+            <% tec.forEach((t, i)=> { %>
+              <tr>
+                <td>
+                  <select name="technologies[<%= i %>][tech_id]">
+                    <% techDetails.forEach(master=> { %>
+                      <option value="<%= master.tech_id %>" <%=t.tech_id==master.tech_id ? 'selected' : '' %>>
+                        <%= master.tech_name %>
+                      </option>
+                      <% }) %>
+                  </select>
+                </td>
+
+                <td>
+                  <input type="radio" name="technologies[<%= i %>][proficiency_level]" value="beginner"
+                    <%=t.is_beginner==1 ? 'checked' : '' %>>
+                </td>
+
+                <td>
+                  <input type="radio" name="technologies[<%= i %>][proficiency_level]" value="intermediate"
+                    <%=t.is_intermediate==1 ? 'checked' : '' %>>
+                </td>
+
+                <td>
+                  <input type="radio" name="technologies[<%= i %>][proficiency_level]" value="expert" <%=t.is_expert==1
+                    ? 'checked' : '' %>>
+                </td>
               </tr>
-          <% } %>
-        </table>
-      </fieldset>
+              <% }) %>
+                <% } else { %>
+                  <!-- fallback empty row -->
+                  <tr>
+                    <td>
+                      <select name="technologies[0][tech_id]">
+                        <% techDetails.forEach(master=> { %>
+                          <option value="<%= master.tech_id %>">
+                            <%= master.tech_name %>
+                          </option>
+                          <% }) %>
+                      </select>
+                    </td>
+                    <td><input type="radio" name="technologies[0][proficiency_level]" value="beginner"></td>
+                    <td><input type="radio" name="technologies[0][proficiency_level]" value="intermediate"></td>
+                    <td><input type="radio" name="technologies[0][proficiency_level]" value="expert"></td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+      <button type="button" id="techbtn" onclick="addTech()">Add Technology</button>
+    </fieldset>
 
-      <!-- Preferences -->
-      <fieldset>
-        <legend>Preferences</legend>
-        <table>
-          <tr>
-            <td><label for="loc">Preferred Location</label></td>
-            <td>
-              <select name="loc" id="loc">
-                <option value="ahmedabad" <%= pref[0].preferred_location === 'ahmedabad' ? 'selected' : '' %>>Ahmedabad</option>
-                <option value="pune" <%= pref[0].preferred_location === 'pune' ? 'selected' : '' %>>Pune</option>
-                <option value="bangalore" <%= pref[0].preferred_location === 'bangalore' ? 'selected' : '' %>>Bangalore</option>
-              </select>
-            </td>
-            <td><label for="np">Notice Period</label></td>
-            <td><input type="text" name="np" id="np" value="<%= pref[0].notice_period %>" required pattern="[0-9]{1,3}"></td>
-            <td><label for="dep">Department</label></td>
-            <td>
-              <select name="dep" id="dep">
-                <option value="Development" <%= pref[0].department === 'Development' ? 'selected' : '' %>>Development</option>
-                <option value="Design" <%= pref[0].department === 'Design' ? 'selected' : '' %>>Design</option>
-                <option value="Marketing" <%= pref[0].department === 'Marketing' ? 'selected' : '' %>>Marketing</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><label for="ectc">Expected CTC</label></td>
-            <td><input type="text" name="ectc" id="ectc" value="<%= pref[0].expected_ctc %>" required pattern="[0-9]{1,10}"></td>
-            <td><label for="cctc">Current CTC</label></td>
-            <td><input type="text" name="cctc" id="cctc" value="<%= pref[0].current_ctc %>" required pattern="[0-9]{1,10}"></td>
-          </tr>
-        </table>
-      </fieldset>
+    <!-- Reference -->
+    <fieldset>
+      <legend>Reference Contact</legend>
+      <table>
+        <% if(ref && ref.length> 0) { %>
+          <% ref.forEach((r, i)=> { %>
+            <tr>
+              <td><label>Name</label><br><input type="text" name="references[<%= i %>][name]" value="<%= r.ref_name %>"
+                  pattern="[A-Za-z ]{3,}"></td>
+              <td><label>Contact</label><br><input type="text" name="references[<%= i %>][contact]"
+                  value="<%= r.contact_number %>" pattern="[0-9]{10}"></td>
+              <td><label>Relation</label><br><input type="text" name="references[<%= i %>][relation]"
+                  value="<%= r.relation %>" pattern="[A-Za-z ]{3,}"></td>
+            </tr>
+            <% }) %>
+              <% } else { %>
+                <tr>
+                  <td><label>Name</label><br><input type="text" name="references[0][name]" pattern="[A-Za-z ]{3,}"></td>
+                  <td><label>Contact</label><br><input type="text" name="references[0][contact]" pattern="[0-9]{10}">
+                  </td>
+                  <td><label>Relation</label><br><input type="text" name="references[0][relation]"
+                      pattern="[A-Za-z ]{3,}"></td>
+                </tr>
+                <% } %>
+      </table>
+    </fieldset>
 
-      <button type="submit">Update Application</button>
-    </form>
+    <!-- Preferences -->
+    <fieldset>
+      <legend>Preferences</legend>
+      <table>
+        <tr>
+          <td><label for="loc">Preferred Location</label></td>
+          <td>
+            <select name="loc" id="loc">
+              <option value="ahmedabad" <%=pref[0].preferred_location==='ahmedabad' ? 'selected' : '' %>>Ahmedabad
+              </option>
+              <option value="pune" <%=pref[0].preferred_location==='pune' ? 'selected' : '' %>>Pune</option>
+              <option value="bangalore" <%=pref[0].preferred_location==='bangalore' ? 'selected' : '' %>>Bangalore
+              </option>
+            </select>
+          </td>
+          <td><label for="np">Notice Period</label></td>
+          <td><input type="text" name="np" id="np" value="<%= pref[0].notice_period %>" required pattern="[0-9]{1,3}">
+          </td>
+          <td><label for="dep">Department</label></td>
+          <td>
+            <select name="dep" id="dep">
+              <option value="Development" <%=pref[0].department==='Development' ? 'selected' : '' %>>Development
+              </option>
+              <option value="Design" <%=pref[0].department==='Design' ? 'selected' : '' %>>Design</option>
+              <option value="Marketing" <%=pref[0].department==='Marketing' ? 'selected' : '' %>>Marketing</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="ectc">Expected CTC</label></td>
+          <td><input type="text" name="ectc" id="ectc" value="<%= pref[0].expected_ctc %>" required
+              pattern="[0-9]{1,10}"></td>
+          <td><label for="cctc">Current CTC</label></td>
+          <td><input type="text" name="cctc" id="cctc" value="<%= pref[0].current_ctc %>" required
+              pattern="[0-9]{1,10}"></td>
+        </tr>
+      </table>
+    </fieldset>
 
-    <script>
-      // Simple JS to handle dynamic rows (placeholder logic based on your original structure)
-      function removerow(btn) {
-        var row = btn.parentNode.parentNode;
-        row.parentNode.removeChild(row);
-      }
+    <button type="submit">Update Application</button>
+  </form>
 
-      function addrow() {
-        var table = document.getElementById("container").getElementsByTagName('tbody')[0];
-        var newRow = table.insertRow(table.rows.length);
-        var index = table.rows.length - 1;
-        
-        var cell1 = newRow.insertCell(0);
-        var cell2 = newRow.insertCell(1);
-        var cell3 = newRow.insertCell(2);
-        var cell4 = newRow.insertCell(3);
-        var cell5 = newRow.insertCell(4);
+  <script>
+    // Simple JS to handle dynamic rows (placeholder logic based on your original structure)
+    function removerow(btn) {
+      var row = btn.parentNode.parentNode;
+      row.parentNode.removeChild(row);
+    }
 
-        cell1.innerHTML = '<input type="text" name="work['+index+'][company_name]" pattern="[A-Za-z ]{3,}" required />';
-        cell2.innerHTML = '<input type="text" name="work['+index+'][designation]" pattern="[A-Za-z ]{2,}" required/>';
-        cell3.innerHTML = '<input type="date" name="work['+index+'][from_date]" required />';
-        cell4.innerHTML = '<input type="date" name="work['+index+'][to_date]" required />';
-        cell5.innerHTML = '<button type="button" onclick="removerow(this)">remove</button>';
-      }
-      
-      function addTech() {
-        // Similar logic would be needed here for technologies if dynamic adding is required
-        alert("Add Technology logic needs implementation similar to addrow");
-      }
-    </script>
-  </body>
+    function addrow() {
+      var table = document.getElementById("container").getElementsByTagName('tbody')[0];
+      var newRow = table.insertRow(table.rows.length);
+      var index = table.rows.length - 1;
+
+      var cell1 = newRow.insertCell(0);
+      var cell2 = newRow.insertCell(1);
+      var cell3 = newRow.insertCell(2);
+      var cell4 = newRow.insertCell(3);
+      var cell5 = newRow.insertCell(4);
+
+      cell1.innerHTML = '<input type="text" name="work[' + index + '][company_name]" pattern="[A-Za-z ]{3,}" required />';
+      cell2.innerHTML = '<input type="text" name="work[' + index + '][designation]" pattern="[A-Za-z ]{2,}" required/>';
+      cell3.innerHTML = '<input type="date" name="work[' + index + '][from_date]" required />';
+      cell4.innerHTML = '<input type="date" name="work[' + index + '][to_date]" required />';
+      cell5.innerHTML = '<button type="button" onclick="removerow(this)">remove</button>';
+    }
+
+    function addTech() {
+      // Similar logic would be needed here for technologies if dynamic adding is required
+      alert("Add Technology logic needs implementation similar to addrow");
+    }
+  </script>
+</body>
+
 </html>

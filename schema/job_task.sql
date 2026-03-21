@@ -17,8 +17,6 @@ city varchar(50) not null,
 state varchar(50) not null,
 zipcode char(6) not null
 );
-drop table basic_details;
-select * from basic_details;
 
 create table education(
 ed_id bigint primary key auto_increment,
@@ -35,9 +33,6 @@ percentage decimal(5,2) not null,
 foreign key(applicant_id) references basic_details(applicant_id) on delete cascade,
 foreign key(ed_id) references education(ed_id)
 );
-select * from basic_details;
-truncate basic_details;
-
 
 CREATE TABLE work_experience (
     work_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -81,10 +76,6 @@ CREATE TABLE student_technologies (
     FOREIGN KEY (tech_id) REFERENCES technologies (tech_id)
 );
 
-drop table technologies;
-drop table student_technologies;
-
-
 CREATE TABLE reference_contacts (
     ref_id bigint PRIMARY KEY AUTO_INCREMENT,
     applicant_id bigint not null,
@@ -112,7 +103,7 @@ show tables;
 select * from languages;
 drop database job_application;	
 select * from basic_details;
-select * from education_details;
+select * from education_details;	
 select * from education;
 insert into languages (language_name) values("hindi");
  

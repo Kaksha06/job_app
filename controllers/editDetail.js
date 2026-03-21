@@ -15,6 +15,8 @@ export const editApplicant = async (req, res) => {
       "SELECT * FROM education_details WHERE applicant_id = ?",
       [applicantId]
     );
+    console.log(education);
+    
 
     const [work] = await db.query(
       "SELECT * FROM work_experience WHERE applicant_id = ?",
@@ -30,8 +32,12 @@ export const editApplicant = async (req, res) => {
       "SELECT * FROM student_technologies WHERE applicant_id = ?",
       [applicantId]
     );
-    
+    console.log(technologies)
+
     const [reference_contacts] = await db.query("SELECT * FROM reference_contacts WHERE applicant_id = ?",[applicantId]);
+    console.log(reference_contacts);
+    
+
     const [preferences] = await db.query("SELECT * FROM preferences WHERE applicant_id = ?",[applicantId])
 
     const [edDetails] = await db.query("SELECT * FROM education");

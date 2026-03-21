@@ -50,7 +50,7 @@ export const updateData = async (req, res) => {
     for (const edu of req.body.education)
       await db.query(
         `insert into education_details(applicant_id,ed_id,board_name,passing_year,percentage) values (?,?,?,?,?)`,
-        [applicantId, edu.ed_id, edu.board_name, edu.pass_year, edu.percent],
+        [applicantId, edu.ed_id, edu.board_name, edu.passing_year, edu.percentage],
       );
 
     //work experience
@@ -100,11 +100,12 @@ export const updateData = async (req, res) => {
       applicantId,
     ]);
     //  console.log(req.body.references);
+    for (const r of req.body.references){
     await db.query(
       `insert into reference_contacts(applicant_id,ref_name,contact_number,relation) values (?,?,?,?) `,
-      [applicantId, req.body.rname, req.body.rphn, req.body.rrel],
+      [applicantId, r.name, r.contact, r.relation],
     );
-
+  }
     //preferences
     await db.query(`delete from preferences where applicant_id=?`, [
       applicantId,
@@ -121,7 +122,7 @@ export const updateData = async (req, res) => {
         req.body.cctc,
       ],
     );
-    res.redirect("/display",`${applicantId}`)
+    res.redirect("/display");
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);

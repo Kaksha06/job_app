@@ -43,7 +43,7 @@ const insertData = async (req, res) => {
     const applicantId = result.insertId;
 
     //education
-    // console.log(req.body.education);
+    console.log(req.body.education);
 
     for (const edu of req.body.education)
       await conn.query(

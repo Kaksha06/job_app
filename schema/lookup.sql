@@ -40,7 +40,7 @@ INSERT INTO languages (language_name) VALUES
 -- TECHNOLOGIES
 -- =========================
 
-INSERT INTO technologies (technology_name) VALUES
+INSERT INTO technologies (tech_name) VALUES
 ('Python'), ('JavaScript'), ('TypeScript'), ('Java'), ('C#'),
 ('Go'), ('Rust'), ('PHP'), ('Swift'), ('Kotlin'),
 ('React'), ('Node.js'), ('Angular'), ('Django'), ('Spring Boot'),
