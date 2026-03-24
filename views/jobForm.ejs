@@ -170,12 +170,16 @@
     <td><input type="text" id="phone" name="phone" pattern="[6-9]{1}[0-9]{9}"
 required /></td>
 
-    <td><label for="city">City</label></td>
-    <td><input type="text" id="city" name="city" /></td>
-  </tr>
-
-  <tr>
-    <td><label for="state">State</label></td>
+<td>
+  <label>Country</label>
+ </td>
+ <td>
+  <select name="country" id="country">
+    <option></option>
+  </select>
+ </td> 
+</td>
+<td><label for="state">State</label></td>
     <td>
       <select name="state" id="state">
         <option value="">-- Select State --</option>
@@ -183,7 +187,12 @@ required /></td>
         <option value="Maharashtra">Maharashtra</option>
       </select>
     </td>
+    <td><label for="city">City</label></td>
+    <td><input type="text" id="city" name="city" /></td>
+  </tr>
 
+  <tr>
+    
     <td><label for="zip">Zipcode</label></td>
     <td><input type="text" id="zip" name="zip" pattern="[0-9]{6}" required>
 <span id="zip_error"></span></td>
@@ -214,28 +223,29 @@ required /></td>
   </tr>
 </table>
 
-      <!-- </form> -->
-      
     </fieldset>
     <br />
 
     <!-- education form -->
     <fieldset>
       <legend>Education details</legend>
-       <table>
+       <table id="educationcontainer">
         <tr>
           <th>Course</th>
           <th>Name of board</th>
           <th>Passing Year</th>
           <th>Percentage</th>
+          <th>Action</th>
           </tr>
+          <tbody>
           <tr>
             <td>
-              <select name="education[0][ed_id]">
+              <select name="education[0][ed_id]" >
+                <option value="">Select course</option>
               <% edDetails.forEach((e) => { %>
-                <% if(e.ed_name === 'SSC') {%>
+                
   <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
-<% }}) %>
+<% }) %>
               </select>
             </td>
             <td>
@@ -247,14 +257,18 @@ required /></td>
             <td>
                 <input type="number" name="education[0][percent]">
             </td>
+            <td>
+                <button type="button" onclick="removeeducation()">remove</button>
+            </td>
           </tr>
           <tr>
              <td>
               <select name="education[1][ed_id]">
+                <option value="">Select course</option>
                <% edDetails.forEach((e) => { %>
-               <% if(e.ed_name==='HSC'){%>
+               
  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
-<% }}) %>
+<% }) %>
               </select>
             </td>
            <td>
@@ -266,10 +280,14 @@ required /></td>
             <td>
                 <input type="number" name="education[1][percent]">
             </td>
+             <td>
+               <button type="button" onclick="removeeducation()">remove</button>
+            </td>
           </tr> 
           <tr>
              <td>
               <select name="education[2][ed_id]">
+                <option value="">Select course</option>
                <% edDetails.forEach((e) => { %>
                 <% if(!(e.ed_name==='SSC' || e.ed_name==='HSC')){%>
   <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
@@ -285,26 +303,15 @@ required /></td>
             <td>
                 <input type="number" name="education[2][percent]">
             </td>
-          </tr>
-           <tr>
              <td>
-              <select name="education[3][ed_id]">
-               <% edDetails.forEach((e) => { %>
-                <% if(!(e.ed_name==='SSC' || e.ed_name==='HSC')){%>
-  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
-<% }}) %>
-              </select>
-            </td>
-            <td>
-              <input type="text" name="education[3][board_name]">
-            </td>
-            <td>
-                <input type="text" name="education[3][pass_year]">
-            </td>
-            <td>
-                <input type="number" name="education[3][percent]">
+                <button type="button" onclick="removeeducation()">remove</button>
             </td>
           </tr>
+           
+          <td>
+                <button type="button" onclick="addeducation()">add</button>
+              </td>
+          </tbody>
        </table>
     
     </fieldset>
@@ -312,8 +319,7 @@ required /></td>
     <!-- work Experience -->
     <fieldset>
       <legend>Work Experience</legend>
-      <!-- <form action="#"> -->
-        <table id="container">
+        <table id="workcontainer">
           <thead>
             <tr>
               <th>Company Name</th>
@@ -336,6 +342,7 @@ required /></td>
 
               <td><input type="date" id="todt[]" required 
             title="Please select To Date" name="work[0][to_date]"/></td>
+
               <td>
                 <button type="button" onclick="removerow()">remove</button>
               </td>
@@ -343,7 +350,6 @@ required /></td>
           </tbody>
         </table>
         <button type= "button" onclick="addrow()" class="addbtn">Add</button>
-      <!-- </form> -->
     </fieldset>
 
     <!-- Language -->
@@ -505,6 +511,72 @@ required /></td>
  <button type="submit">Submit</button>
  </form>
     <script>
+      function addrow(){
+        const table = document.getElementById("workcontainer").getElementsByTagName("tbody")[0]
+        const newRow =table.insertRow(table.rows.length);
+
+        newRow.innerHTML = `<td><input type="text" id="cname[]" pattern="[A-Za-z ]{3,}" name="work[0][company_name]"
+            title="Company name must contain at least 3 letters and only alphabets" required /></td>
+
+              <td><input type="text" id="des[]"  pattern="[A-Za-z ]{2,}" 
+            title="Designation must contain only letters" name= "work[0][designation]" required/></td>
+
+              <td><input type="date" id="fromdt[]" required 
+            title="Please select From Date" name="work[0][from_date]" /></td>
+
+              <td><input type="date" id="todt[]" required 
+            title="Please select To Date" name="work[0][to_date]"/></td>
+
+              <td>
+                <button type="button" onclick="removerow()">remove</button>
+              </td>`;
+
+          table.appendChild(newRow);
+      } 
+
+      function removerow(){
+     const table = document.getElementById("workcontainer").getElementsByTagName("tbody")[0];
+     if(table.rows.length >1){
+        const lastrow = table.rows[table.rows.length-1];
+         table.removeChild(lastrow)
+     }
+      }
+
+      function addeducation(){
+        const table = document.getElementById("educationcontainer").getElementsByTagName("tbody")[0]
+
+        const newRow = table.insertRow(table.rows.length);
+
+        newRow.innerHTML = `<td>
+              <select name="education[0][ed_id]">
+                <option value=""> Select Course</option>
+              <% edDetails.forEach((e) => { %>
+                
+  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
+<% }) %>
+              </select>
+            </td>
+            <td>
+              <input type="text" name="education[0][board_name]">
+            </td>
+            <td>
+                <input type="text" name="education[0][pass_year]">
+            </td>
+            <td>
+                <input type="number" name="education[0][percent]">
+            </td>
+            <td>
+                <button type="button" onclick="removeeducation()">remove</button>
+            </td>`
+             table.appendChild(newRow);
+      }
+       function removeeducation(){
+     const table = document.getElementById("educationcontainer").getElementsByTagName("tbody")[0];
+     if(table.rows.length >1){
+        const lastrow = table.rows[table.rows.length-1];
+         table.removeChild(lastrow)
+     }
+      }
     </script>
   </body>
 </html>

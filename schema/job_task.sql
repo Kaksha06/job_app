@@ -13,8 +13,9 @@ dob date not null,
 relationship varchar(20) not null,
 address1 text not null,
 address2 text not null,
-city varchar(50) not null,
-state varchar(50) not null,
+city int not null,
+country int not null,
+state int not null,
 zipcode char(6) not null
 );
 
@@ -96,24 +97,32 @@ CREATE TABLE preferences (
     FOREIGN KEY (applicant_id) REFERENCES basic_details (applicant_id) on delete cascade
 );
 
-drop table preferences;
-drop table education_details;
-SET FOREIGN_KEY_CHECKS = 0;
+create table countries(
+ country_id int primary key auto_increment,
+ country_name varchar(50) not null unique
+);
+
+create table states(
+state_id int primary key auto_increment,
+country_id int not null ,
+state_name varchar(50) not null unique,
+foreign key(country_id) references countries(country_id)
+);
+
+create table cities(
+city_id int primary key auto_increment,
+state_id int not null ,
+city_name varchar(50) not null unique,
+foreign key(state_id) references states(state_id)
+);
+
+
+drop table cities;
+drop table countries;
+drop table states;
+
+
+
+
+drop database job_application;
 show tables;
-select * from languages;
-drop database job_application;	
-select * from basic_details;
-select * from education_details;	
-select * from education;
-insert into languages (language_name) values("hindi");
- 
-truncate table basic_details;
-truncate table education;
-truncate table education_details;
-truncate table languages;
-truncate table student_languages;
-truncate table technologies;
-truncate table student_technologies;
-truncate table reference_contacts;
-truncate table preferences;
-truncate table work_experience;

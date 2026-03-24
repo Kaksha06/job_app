@@ -8,12 +8,21 @@ import deleteDetail from "../controllers/deleteDetail.js";
 import {displayData} from "../controllers/displayData.js"
 import { updateData } from "../controllers/updateDetail.js";
 import { editApplicant } from "../controllers/editDetail.js";
+import getCountries from "../controllers/getCountries.js";
+import getStates from "../controllers/getStates.js";
+import getCities from "../controllers/getCities.js";
 
 const router = express.Router();
-router.get("/", async (req, res) => {
+router.get("/addform", async (req, res) => {
   const edDetails = await getEducationType();
   const languages = await getLanguageType();
   const techDetails = await getTechnologyType();
+
+  const countries = await getCountries();
+  console.log(countries);
+  
+  // const states = await getStates();
+  // const cities = await getCities();
 
   res.render(
     "jobForm",
@@ -21,11 +30,13 @@ router.get("/", async (req, res) => {
       edDetails,
       languages,
       techDetails,
-      // basicDetails
+      countries,
+      // states,
+      // cities
     },
   );
 });  
-router.get("/display",displayData);
+router.get("/",displayData);
 router.post("/insert", insertData);
 router.get("/view/:applicantId", readDetails);
 router.get("/delete/:applicantId",deleteDetail);

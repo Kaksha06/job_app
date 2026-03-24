@@ -23,8 +23,7 @@
       margin-bottom: 20px;
     }
 
-    th,
-    td {
+    th,td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: left;
@@ -40,21 +39,9 @@
       padding: 15px;
     }
 
-    legend {
-      font-weight: bold;
-      padding: 0 5px;
-    }
-
-    span {
-      color: red;
-      font-size: 0.8em;
-    }
-
     .addbtn {
       background-color: #4CAF50;
       color: white;
-      border: none;
-      padding: 10px;
       cursor: pointer;
     }
 
@@ -146,7 +133,7 @@
     <!-- Education Form -->
     <fieldset>
       <legend>Education Details</legend>
-      <table>
+      <table id="educationcontainer">
         <thead>
           <tr>
             <th>Course</th>
@@ -158,6 +145,7 @@
         <tbody>
           <% if(edu && edu.length> 0) { %>
             <% edu.forEach((e, i)=> { %>
+        
               <tr>
                 <td>
                   <select name="education[<%= i %>][ed_id]">
@@ -180,11 +168,14 @@
                 <td>
                   <input type="number" name="education[<%= i %>][percentage]" value="<%= e.percentage %>">
                 </td>
+                <td><button type="button" onclick="removeeducation(this)">remove</button></td>
+
               </tr>
+             
               <% }) %>
 
                 <% } else { %>
-
+               
                   <!-- fallback -->
                   <tr>
                     <td>
@@ -201,10 +192,10 @@
                     <td><input type="text" name="education[0][passing_year]"></td>
                     <td><input type="number" name="education[0][percentage]"></td>
                   </tr>
-
                   <% } %>
         </tbody>
       </table>
+       <button type="button" onclick="addeducation()" class="addbtn">Add Row</button>
     </fieldset>
 
     <!-- Work Experience -->
@@ -418,8 +409,44 @@
   </form>
 
   <script>
-    // Simple JS to handle dynamic rows (placeholder logic based on your original structure)
-    function removerow(btn) {
+      function addeducation(){
+        const table = document.getElementById("educationcontainer").getElementsByTagName("tbody")[0]
+
+        const newRow = table.insertRow(table.rows.length);
+
+        newRow.innerHTML = `<td>
+              <select name="education[0][ed_id]">
+                <option value=""> Select Course</option>
+              <% edDetails.forEach((e) => { %>
+                
+  <option value="<%= e.ed_id %>"><%= e.ed_name %></option>
+<% }) %>
+              </select>
+            </td>
+            <td>
+              <input type="text" name="education[0][board_name]">
+            </td>
+            <td>
+                <input type="text" name="education[0][pass_year]">
+            </td>
+            <td>
+                <input type="number" name="education[0][percent]">
+            </td>
+            <td>
+                <button type="button" onclick="removeeducation()">remove</button>
+            </td>`
+             table.appendChild(newRow);
+      }
+       function removeeducation(){
+     const table = document.getElementById("educationcontainer").getElementsByTagName("tbody")[0];
+     if(table.rows.length >1){
+        const lastrow = table.rows[table.rows.length-1];
+         table.removeChild(lastrow)
+     }
+      }
+
+
+      function removerow(btn) {
       var row = btn.parentNode.parentNode;
       row.parentNode.removeChild(row);
     }
@@ -433,18 +460,13 @@
       var cell2 = newRow.insertCell(1);
       var cell3 = newRow.insertCell(2);
       var cell4 = newRow.insertCell(3);
-      var cell5 = newRow.insertCell(4);
+      var cell5 = newRow.insertCell(4);//remove button
 
       cell1.innerHTML = '<input type="text" name="work[' + index + '][company_name]" pattern="[A-Za-z ]{3,}" required />';
       cell2.innerHTML = '<input type="text" name="work[' + index + '][designation]" pattern="[A-Za-z ]{2,}" required/>';
       cell3.innerHTML = '<input type="date" name="work[' + index + '][from_date]" required />';
       cell4.innerHTML = '<input type="date" name="work[' + index + '][to_date]" required />';
       cell5.innerHTML = '<button type="button" onclick="removerow(this)">remove</button>';
-    }
-
-    function addTech() {
-      // Similar logic would be needed here for technologies if dynamic adding is required
-      alert("Add Technology logic needs implementation similar to addrow");
     }
   </script>
 </body>

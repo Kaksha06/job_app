@@ -2,7 +2,7 @@ import db from "../db.js";
 
 export const displayData = async (req, res) => {
   const limit = 20;
-  const page = parseInt(req.query.page || 1);
+  const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
   
 

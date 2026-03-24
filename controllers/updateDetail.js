@@ -122,7 +122,7 @@ export const updateData = async (req, res) => {
         req.body.cctc,
       ],
     );
-    res.redirect("/display");
+    res.redirect("/");
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);
