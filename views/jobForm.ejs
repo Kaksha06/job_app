@@ -7,9 +7,6 @@
     <style>
       body {
         height: 100vh;
-        /* display: flex;
-        justify-content: center;
-        align-items: "center"; */
       }
       input {
         margin: 15px;
@@ -32,117 +29,11 @@
     <fieldset>
       <legend>Basic Detail</legend>
       <form  method="post" action="/insert" novalidate>
-      <!-- <form id="basicform"> -->
-        <!-- <table>
-          <tr>
-            <td>
-              <label for="fname">First Name</label>
-              <input type="text" id="fname" name="fname" />
-            </td>
-            <td>
-              <label for="lname">Last Name</label>
-              <input type="text" id="lname" name="lname" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="des">Designation</label>
-              <input type="text" id="des" name="des" />
-            </td>
-            <td>
-              <label for="add1">Address 1 </label>
-              <input type="text" id="add1" name="add1" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="email">email</label>
-              <input type="text" id="email" name="email" />
-            </td>
-            <td>
-              <label for="add2">Address 2 </label>
-              <input type="text" id="add2" name="add2" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="phone">Phone number</label>
-              <input type="text" id="phone" name="phone" />
-            </td>
-            <td>
-              <label for="city">City </label>
-              <input type="text" id="city" name="city" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="state">State</label>
-              <select name="state" id="state">
-                <option value="">-- Select State --</option>
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                <option value="Assam">Assam</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Chhattisgarh">Chhattisgarh</option>
-                <option value="Goa">Goa</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                <option value="Jharkhand">Jharkhand</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Manipur">Manipur</option>
-                <option value="Meghalaya">Meghalaya</option>
-                <option value="Mizoram">Mizoram</option>
-                <option value="Nagaland">Nagaland</option>
-                <option value="Odisha">Odisha</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Sikkim">Sikkim</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Telangana">Telangana</option>
-                <option value="Tripura">Tripura</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Uttarakhand">Uttarakhand</option>
-                <option value="West Bengal">West Bengal</option>
-              </select>
-            </td>
-            <td>
-              <label for="zip">Zipcode</label>
-              <input type="text" id="zip" name="zip" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="relstatus">Relationship Status</label>
-              <select name="relstatus" id="relstatus">
-                <option value="single">single</option>
-                <option value="married">married</option>
-                <option value="divorced">divorced</option>
-              </select>
-            </td>
-            <td>
-              <label>Gender</label>
-              <input type="radio" id="male" name="gender" />
-              <label for="male">male</label>
-              <input type="radio" id="female" name="gender" />
-              <label for="female">female</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="dob">DOB</label>
-              <input type="date" id="dob" name="dob" />
-            </td>
-          </tr>
-        </table> -->
       <table>
   <tr>
     <td><label for="fname">First Name</label></td>
     <td><input type="text" id="fname" name="fname"  pattern="[A-Za-z\s]+" title="Only letters are allowed"
-         required/></td>
+        required/></td>
 
     <td><label for="lname">Last Name</label></td>
     <td><input type="text" id="lname" name="lname" pattern="[A-Za-z\s]+" title="Only letters are allowed"
@@ -167,32 +58,36 @@
 
   <tr>
     <td><label for="phone">Phone Number</label></td>
-    <td><input type="text" id="phone" name="phone" pattern="[6-9]{1}[0-9]{9}"
-required /></td>
+    <td><input type="text" id="phone" name="phone" pattern="[6-9]{1}[0-9]{9}"required /></td>
 
-<td>
-  <label>Country</label>
- </td>
+<td><label>Country</label></td>
  <td>
-  <select name="country" id="country">
-    <option></option>
+  <select name="country" id="country" onchange="getStates()">
+    <option value="">Select Country</option>
+    <% countries.forEach((c)=>{%>
+      <option value="<%=c.country_id %>"><%=c.country_name %></option>
+    <%})%>
   </select>
  </td> 
-</td>
-<td><label for="state">State</label></td>
+
+    <td><label for="state">State</label></td>
     <td>
-      <select name="state" id="state">
-        <option value="">-- Select State --</option>
-        <option value="Gujarat">Gujarat</option>
-        <option value="Maharashtra">Maharashtra</option>
+      <select name="state" id="state" onchange="getCities()">
+        <option value="">Select State</option>
       </select>
+      
     </td>
+
     <td><label for="city">City</label></td>
-    <td><input type="text" id="city" name="city" /></td>
+    <td>
+      <select name="city" id="city">
+      <option value="">Select City</option>
+      </select>
+      
+    </td>
   </tr>
 
   <tr>
-    
     <td><label for="zip">Zipcode</label></td>
     <td><input type="text" id="zip" name="zip" pattern="[0-9]{6}" required>
 <span id="zip_error"></span></td>
@@ -344,7 +239,7 @@ required /></td>
             title="Please select To Date" name="work[0][to_date]"/></td>
 
               <td>
-                <button type="button" onclick="removerow()">remove</button>
+                <button type="button" onclick="removerow(this)">remove</button>
               </td>
             </tr>
           </tbody>
@@ -576,6 +471,38 @@ required /></td>
         const lastrow = table.rows[table.rows.length-1];
          table.removeChild(lastrow)
      }
+      }
+
+      const getStates = async (req,res) => {
+        const countryId = document.getElementById("country").value
+        const stateDropdown = document.getElementById("state");
+        const response = await fetch(`/state/${countryId}`)
+        const states = await response.json()
+    
+        states.forEach(s => {
+          const option = document.createElement("option")
+          option.value = s.state_id;
+          option.textContent = s.state_name;
+          stateDropdown.appendChild(option);
+        });
+      }
+
+      const getCities = async (req,res) => {
+        const stateId = document.getElementById("state").value
+        const cityDropdown = document.getElementById("city")
+        const response = await fetch(`/city/${stateId}`)
+        const cities = await response.json()
+        
+        cities.forEach((c)=>{
+          const option = document.createElement("option")
+          option.value = c.city_id;
+          option.textContent = c.city_name;
+          cityDropdown.appendChild(option)
+        })
+      }
+
+      function name(params) {
+        
       }
     </script>
   </body>

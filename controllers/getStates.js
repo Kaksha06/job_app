@@ -5,6 +5,6 @@ const getStates = async (req,res) => {
     const [row] = await db.query(
         `select state_id,state_name from states where country_id= ?`,[countryId]
     )
-    return row;
+    res.send(row);
 }
 export default getStates

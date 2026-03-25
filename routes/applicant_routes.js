@@ -21,9 +21,7 @@ router.get("/addform", async (req, res) => {
   const countries = await getCountries();
   console.log(countries);
   
-  // const states = await getStates();
-  // const cities = await getCities();
-
+ 
   res.render(
     "jobForm",
     {
@@ -31,11 +29,11 @@ router.get("/addform", async (req, res) => {
       languages,
       techDetails,
       countries,
-      // states,
-      // cities
     },
   );
 });  
+router.get("/state/:countryId",getStates)
+router.get("/city/:stateId",getCities)
 router.get("/",displayData);
 router.post("/insert", insertData);
 router.get("/view/:applicantId", readDetails);

@@ -5,7 +5,7 @@ const getCities = async (req,res) => {
     const [row] = await db.query(
         `select city_id,city_name from cities where state_id = ?`,[stateId]
     )
-    return row;
+res.send(row);
 
 }
 export default getCities;
